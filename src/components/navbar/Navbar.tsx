@@ -20,9 +20,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 30);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -41,9 +41,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#09090B]/85 backdrop-blur-md border-b border-[#27272A] py-3 shadow-lg'
-          : 'bg-transparent py-5'
+          ? 'bg-[#09090B]/90 backdrop-blur-md border-b border-[#27272A] py-2.5 shadow-lg'
+          : 'bg-transparent py-4 sm:py-5'
       }`}
+      style={{ paddingTop: 'max(0.75rem, env(safe-area-inset-top))' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Logo */}
@@ -51,14 +52,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           href="#hero"
           className="flex items-center gap-2.5 group focus:outline-none"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-600 flex items-center justify-center font-heading font-bold text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-600 flex items-center justify-center font-heading font-bold text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform text-sm sm:text-base">
             HV
           </div>
           <div className="flex flex-col">
-            <span className="font-heading font-semibold text-zinc-100 tracking-tight text-base group-hover:text-blue-400 transition-colors">
+            <span className="font-heading font-semibold text-zinc-100 tracking-tight text-sm sm:text-base group-hover:text-blue-400 transition-colors">
               {PERSONAL_INFO.name}
             </span>
-            <span className="text-[11px] text-zinc-400 font-mono tracking-wider">
+            <span className="text-[10px] sm:text-[11px] text-zinc-400 font-mono tracking-wider">
               JAVA & AI ENGINEER
             </span>
           </div>
@@ -119,11 +120,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
 
-        {/* Mobile menu trigger */}
+        {/* Mobile Action Buttons & Menu Trigger */}
         <div className="flex md:hidden items-center gap-2">
           <button
             onClick={onOpenAiAssistant}
-            className="p-2 rounded-lg bg-purple-950/60 border border-purple-800/40 text-purple-300"
+            className="p-2.5 rounded-xl bg-purple-950/70 border border-purple-800/50 text-purple-300 active:scale-95 transition-transform"
             title="Ask Portfolio AI"
           >
             <Bot className="w-4 h-4" />
@@ -131,39 +132,40 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-[#18181B] border border-[#27272A] text-zinc-300 hover:text-white"
+            className="p-2.5 rounded-xl bg-[#18181B] border border-[#27272A] text-zinc-300 active:scale-95 transition-transform"
+            aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Navigation (Touch-optimized) */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#09090B]/95 backdrop-blur-xl border-b border-[#27272A] px-4 pt-3 pb-6 flex flex-col gap-3 animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col gap-1">
+        <div className="md:hidden bg-[#09090B]/95 backdrop-blur-2xl border-b border-[#27272A] px-4 pt-3 pb-6 flex flex-col gap-3 animate-in slide-in-from-top duration-200">
+          <div className="grid grid-cols-2 gap-1.5">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800/50"
+                className="px-3.5 py-2.5 rounded-xl text-xs font-medium text-zinc-300 active:text-white active:bg-blue-600/20 border border-transparent active:border-blue-500/30 transition-all text-center bg-[#18181B]/50"
               >
                 {link.name}
               </a>
             ))}
           </div>
 
-          <div className="pt-2 border-t border-[#27272A] flex flex-col gap-2">
+          <div className="pt-3 border-t border-[#27272A] flex flex-col gap-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenCommandPalette();
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#18181B] border border-[#27272A] text-zinc-300 text-xs font-mono"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#18181B] border border-[#27272A] text-zinc-300 text-xs font-mono active:scale-98 transition-transform"
             >
               <Command className="w-4 h-4 text-blue-400" />
-              <span>Search & Command Palette (Ctrl + K)</span>
+              <span>Search & Command Palette</span>
             </button>
 
             <button
@@ -171,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenResume();
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-blue-600 text-white text-xs font-medium shadow-md shadow-blue-600/30"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-medium shadow-md shadow-blue-600/30 active:scale-98 transition-transform"
             >
               <FileText className="w-4 h-4" />
               <span>View & Download Resume</span>
